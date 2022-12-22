@@ -1,8 +1,9 @@
 const Koa = require('koa')
 const { koaBody } = require('koa-body')
 const Router = require('koa-router')
+const fs = require('fs')
 // const { redis } = require('./db')
-
+const writeStream = require('./utils/stream')
 const app = new Koa()
 const router = new Router()
 app.use(koaBody())
@@ -24,6 +25,11 @@ app.use(koaBody())
 //         console.log(val)
 //     });
 // })
+const ws = new writeStream('./data/a.txt', {})
+router.post('/writeFile', ctx => {
+    const { str } = ctx.request.body
+    ws.write(str + '\n')
+})
 
 app.use(router.routes()).use(router.allowedMethods())
 
